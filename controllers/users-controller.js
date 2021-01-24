@@ -65,7 +65,7 @@ const login = async (req, res) => {
 
     res.json({
       token,
-      user: { id: user._id, displayName: user.displayName, email: user.email },
+      user: { id: user._id, displayName: user.displayName },
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -79,6 +79,14 @@ const deleteUser = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+};
+
+const getUser = async (req, res) => {
+  const user = await User.findById(req.user);
+  res.json({
+    displayName: user.displayName,
+    id: user._id,
+  });
 };
 
 const checkToken = async (req, res) => {
@@ -102,3 +110,4 @@ exports.register = register;
 exports.login = login;
 exports.deleteUser = deleteUser;
 exports.checkToken = checkToken;
+exports.getUser = getUser;
