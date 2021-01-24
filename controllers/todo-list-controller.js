@@ -6,7 +6,6 @@ const addList = async (req, res) => {
     let users = [];
     const user = await User.findById(req.user);
     user && users.push(user);
-    console.log('users before: ' + users);
 
     const { name } = req.body;
     const dateAdded = Date.now();
@@ -39,6 +38,39 @@ const addList = async (req, res) => {
   }
 };
 
+const getAllLists = async (req, res) => {
+  try {
+    const user = await User.findById(req.user);
+    const userLists = user.toDoLists;
+    res.status(200).json(userLists);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+const getList = async (req, res) => {
+  try {
+    const listId = req.params.id;
+    const list = await ToDoList.findById(listId);
+    res.status(200).json(list);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+const addTask = async (req, res) => {
+  try {
+    const { title, listId } = req.body;
+    const list = await ToDoList.findById(listId);
+    list.tasks.push({ title });
+    await list.save();
+
+    res.json(list);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 const deleteAll = async (req, res) => {
   try {
     await ToDoList.deleteMany({});
@@ -50,3 +82,6 @@ const deleteAll = async (req, res) => {
 
 exports.addList = addList;
 exports.deleteAll = deleteAll;
+exports.getAllLists = getAllLists;
+exports.addTask = addTask;
+exports.getList = getList;

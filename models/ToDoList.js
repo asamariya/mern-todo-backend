@@ -13,8 +13,8 @@ const toDoListSchema = new mongoose.Schema({
   ],
   tasks: [
     {
-      type: String,
-      isDone: Boolean,
+      title: { type: String, required: true },
+      isDone: { type: Boolean, default: false },
     },
   ],
 });

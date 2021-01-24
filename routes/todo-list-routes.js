@@ -4,9 +4,11 @@ const router = require('express').Router();
 
 const auth = require('../middleware/check-auth');
 const toDoListController = require('../controllers/todo-list-controller');
-const { db } = require('../models/User');
 
 router.post('/add', auth, toDoListController.addList);
 router.delete('/delete', toDoListController.deleteAll);
+router.get('/all', auth, toDoListController.getAllLists);
+router.get('/:id', auth, toDoListController.getList);
+router.post('/addtask', auth, toDoListController.addTask);
 
 module.exports = router;
