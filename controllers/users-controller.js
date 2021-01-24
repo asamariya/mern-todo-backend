@@ -75,7 +75,7 @@ const login = async (req, res) => {
 const deleteUser = async (req, res) => {
   try {
     const deletedUser = await User.findByIdAndDelete(req.user);
-    res.json(deleteUser);
+    res.json(deletedUser);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -92,6 +92,7 @@ const getUser = async (req, res) => {
 const checkToken = async (req, res) => {
   try {
     const token = req.header('x-auth-token');
+
     if (!token) return res.json(false);
 
     const verifiedUser = jwt.verify(token, process.env.JWT_SECRET);

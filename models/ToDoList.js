@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
+const { Schema } = require('mongoose');
 
 const toDoListSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
-  dateAdded: { type: Date },
+  dateAdded: { type: Date, required: true },
   users: [
     {
       type: Schema.Types.ObjectId,
@@ -12,8 +13,8 @@ const toDoListSchema = new mongoose.Schema({
   ],
   tasks: [
     {
-      type: Schema.Types.ObjectId,
-      ref: 'Task',
+      type: String,
+      isDone: Boolean,
     },
   ],
 });

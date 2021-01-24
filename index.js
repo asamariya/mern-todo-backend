@@ -4,6 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const usersRoutes = require('./routes/users-routes');
+const toDoListRoutes = require('./routes/todo-list-routes');
 
 // set up express
 const app = express();
@@ -30,3 +31,4 @@ mongoose.connect(
 
 // set up routes
 app.use('/users', usersRoutes);
+app.use('/lists', toDoListRoutes);
