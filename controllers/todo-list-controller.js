@@ -61,11 +61,30 @@ const getList = async (req, res) => {
 const addTask = async (req, res) => {
   try {
     const { title, listId } = req.body;
+    const isDone = false;
     const list = await ToDoList.findById(listId);
-    list.tasks.push({ title });
+    list.tasks.push({ title, isDone });
     await list.save();
 
     res.json(list);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+const deleteTask = async (req, res) => {
+  try {
+    const { taskId } = req.body;
+    // console.log(taskId);
+    const listId = req.params.id;
+    const list = await ToDoList.findById(listId);
+    // console.log('list.tasks: ' + list.tasks);
+    // const index = list.tasks.findIndex((task) => task._id === taskId);
+    const index = list.tasks.map((task) => task._id).indexOf(taskId);
+    list.tasks.splice(index, 1);
+    list.save();
+
+    res.json({ msg: `Deleted task` });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -85,3 +104,4 @@ exports.deleteAll = deleteAll;
 exports.getAllLists = getAllLists;
 exports.addTask = addTask;
 exports.getList = getList;
+exports.deleteTask = deleteTask;

@@ -10,5 +10,6 @@ router.delete('/delete', toDoListController.deleteAll);
 router.get('/all', auth, toDoListController.getAllLists);
 router.get('/:id', auth, toDoListController.getList);
 router.post('/addtask', auth, toDoListController.addTask);
+router.delete('/:id/task', auth, toDoListController.deleteTask);
 
 module.exports = router;
