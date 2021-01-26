@@ -31,7 +31,7 @@ const addList = async (req, res) => {
     const savedList = await newList.save();
     user && user.toDoLists.push(savedList);
     await user.save();
-    console.log('users after: ' + user.toDoLists);
+    // console.log('users after: ' + user.toDoLists);
     res.json(savedList);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -58,6 +58,16 @@ const getList = async (req, res) => {
   }
 };
 
+const deleteList = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedList = await ToDoList.findByIdAndDelete(id);
+    res.status(200).json(deletedList);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 const addTask = async (req, res) => {
   try {
     const { title, listId } = req.body;
@@ -75,19 +85,38 @@ const addTask = async (req, res) => {
 const deleteTask = async (req, res) => {
   try {
     const { taskId } = req.body;
-    // console.log(taskId);
     const listId = req.params.id;
     const list = await ToDoList.findById(listId);
-    // console.log('list.tasks: ' + list.tasks);
-    // const index = list.tasks.findIndex((task) => task._id === taskId);
+
     const index = list.tasks.map((task) => task._id).indexOf(taskId);
     list.tasks.splice(index, 1);
-    list.save();
+    await list.save();
 
     res.json({ msg: `Deleted task` });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+};
+
+const updateTask = async (req, res) => {
+  let list;
+  const { taskId, title, isDone } = req.body;
+  const updatedInfo = { title, isDone };
+  const listId = req.params.id;
+  let oldTitle = req.body.oldTitle;
+
+  list = await ToDoList.findById(listId);
+
+  const index = list.tasks.map((task) => task._id).indexOf(taskId);
+  list.tasks.set(index, updatedInfo);
+
+  try {
+    await list.save();
+  } catch (err) {
+    res.json({ msg: err.message });
+  }
+
+  res.status(200).json(list);
 };
 
 const deleteAll = async (req, res) => {
@@ -105,3 +134,5 @@ exports.getAllLists = getAllLists;
 exports.addTask = addTask;
 exports.getList = getList;
 exports.deleteTask = deleteTask;
+exports.updateTask = updateTask;
+exports.deleteList = deleteList;

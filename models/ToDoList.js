@@ -11,6 +11,7 @@ const toDoListSchema = new mongoose.Schema({
       required: true,
     },
   ],
+  // tasks: { type: Array, default: [] },
   tasks: [
     {
       title: { type: String, required: true },
