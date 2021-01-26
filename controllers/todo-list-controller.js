@@ -68,57 +68,6 @@ const deleteList = async (req, res) => {
   }
 };
 
-const addTask = async (req, res) => {
-  try {
-    const { title, listId } = req.body;
-    const isDone = false;
-    const list = await ToDoList.findById(listId);
-    list.tasks.push({ title, isDone });
-    await list.save();
-
-    res.json(list);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
-const deleteTask = async (req, res) => {
-  try {
-    const { taskId } = req.body;
-    const listId = req.params.id;
-    const list = await ToDoList.findById(listId);
-
-    const index = list.tasks.map((task) => task._id).indexOf(taskId);
-    list.tasks.splice(index, 1);
-    await list.save();
-
-    res.json({ msg: `Deleted task` });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
-const updateTask = async (req, res) => {
-  let list;
-  const { taskId, title, isDone } = req.body;
-  const updatedInfo = { title, isDone };
-  const listId = req.params.id;
-  let oldTitle = req.body.oldTitle;
-
-  list = await ToDoList.findById(listId);
-
-  const index = list.tasks.map((task) => task._id).indexOf(taskId);
-  list.tasks.set(index, updatedInfo);
-
-  try {
-    await list.save();
-  } catch (err) {
-    res.json({ msg: err.message });
-  }
-
-  res.status(200).json(list);
-};
-
 const deleteAll = async (req, res) => {
   try {
     await ToDoList.deleteMany({});
@@ -131,8 +80,5 @@ const deleteAll = async (req, res) => {
 exports.addList = addList;
 exports.deleteAll = deleteAll;
 exports.getAllLists = getAllLists;
-exports.addTask = addTask;
 exports.getList = getList;
-exports.deleteTask = deleteTask;
-exports.updateTask = updateTask;
 exports.deleteList = deleteList;

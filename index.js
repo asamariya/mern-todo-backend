@@ -5,6 +5,7 @@ require('dotenv').config();
 
 const usersRoutes = require('./routes/users-routes');
 const toDoListRoutes = require('./routes/todo-list-routes');
+const taskRoutes = require('./routes/task-routes');
 
 // set up express
 const app = express();
@@ -22,6 +23,7 @@ mongoose.connect(
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
+    useFindAndModify: false,
   },
   (err) => {
     if (err) throw err;
@@ -32,3 +34,4 @@ mongoose.connect(
 // set up routes
 app.use('/users', usersRoutes);
 app.use('/lists', toDoListRoutes);
+app.use('/tasks', taskRoutes);
