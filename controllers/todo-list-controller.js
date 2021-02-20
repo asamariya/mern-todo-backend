@@ -15,7 +15,8 @@ const addList = async (req, res) => {
       return res.status(400).json({ msg: 'No name entered.' });
     }
 
-    const existingList = await ToDoList.findOne({ name: name });
+    const existingList = await ToDoList.findOne({ name: name, users: [user] });
+
     if (existingList) {
       return res
         .status(400)
