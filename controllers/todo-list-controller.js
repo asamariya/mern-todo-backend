@@ -42,7 +42,9 @@ const addList = async (req, res) => {
 const getAllLists = async (req, res) => {
   try {
     const user = await User.findById(req.user);
-    const userLists = user.toDoLists;
+
+    const userLists = await ToDoList.find({ users: [user] });
+
     res.status(200).json(userLists);
   } catch (err) {
     res.status(500).json({ error: err.message });
